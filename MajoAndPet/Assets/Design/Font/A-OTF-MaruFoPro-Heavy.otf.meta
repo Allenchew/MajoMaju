@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 14920184a7679ca4c88cfb571690a8af
+timeCreated: 1544174766
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: A-OTF Maru Folk Pro
+  fontNames:
+  - A-OTF Maru Folk Pro
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1626d3546104d53408c27833ac805b9f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
