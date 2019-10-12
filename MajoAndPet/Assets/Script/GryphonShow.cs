@@ -4,8 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+//グリフォンの演出処理
 public class GryphonShow : MonoBehaviour {
     public static GryphonShow showGryphon;
+
+    #region 初期化
     public GameObject Gryphon;
     public GameObject Box;
     public GameObject BackGround;
@@ -52,15 +55,12 @@ public class GryphonShow : MonoBehaviour {
         _initSize[2] = Food.GetComponent<RectTransform>().sizeDelta;
         BackGround.GetComponent<Image>().material.SetFloat("_EffectAmount", 0);
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    #endregion
 
+    //演出を順番通りに実行する
     public void CallShow()
     {
-        if (vocalOnly)
+        if (vocalOnly)　//音声処理
         {
             switch (vocalOnlyIndex)
             {
@@ -161,7 +161,7 @@ public class GryphonShow : MonoBehaviour {
         }
         else {
             Debug.Log(_showIndex);
-            switch (_showIndex)
+            switch (_showIndex)　//画面処理
             {
                 case 0:
                     _changePic(ScreenMask, null);
@@ -610,6 +610,8 @@ public class GryphonShow : MonoBehaviour {
             _showIndex++;
         }
     }
+
+    #region 汎用関数
     IEnumerator PopOut(GameObject MovTarget, bool initMove)
     {
         AnimDelay = true;
@@ -865,5 +867,5 @@ public class GryphonShow : MonoBehaviour {
         StartCoroutine(delayRun(2.0f,()=> { ScreenMask.SetActive(false);_changePic(ScreenMask, null);_setColor(ScreenMask,Color.white,Color.clear); StartCoroutine(_changeSize(MiddleBar, 0.7f)); }));
         yield return null;
     }
-
+    #endregion
 }

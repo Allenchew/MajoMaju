@@ -4,8 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+
+//ドラゴンのシナリオ演出
 public class DragonShow : MonoBehaviour {
+    #region singleton
     public static DragonShow showDragon;
+    void Awake()
+    {
+        if (showDragon != null && showDragon != this)
+            Destroy(this.gameObject);
+
+        showDragon = this;
+        
+    }
+    #endregion
+
+    #region　初期化
     public GameObject Dragon;
     public GameObject Box;
     public GameObject BackGround;
@@ -17,23 +31,20 @@ public class DragonShow : MonoBehaviour {
     public GameObject MiddleBar;
     public GameObject preBack;
     public GameObject whiteScreen;
-    public bool Showing = true;
-    public bool AnimDelay = true;
+    public bool Showing = true;  //演出中のフラグ
+    public bool AnimDelay = true;　//遅延のフラグ
 
     private bool vocalOnly = false;
     private Vector3[] _initPos = new Vector3[3];
     private Vector2[] _initSize = new Vector2[3];
-    private int _showIndex = -1;
-    private int vocalOnlyIndex = 0;
+    private int _showIndex = -1;　//演出順番のコントローラー
+    private int vocalOnlyIndex = 0;　//音声のコントローラー
     
-    void Awake()
-    {
-        showDragon = this;
-    }
-
+    
     void Start()
     {
         var tempEnshitsu = GameObject.FindGameObjectWithTag("Enshitsu").transform;
+        //オブジェクトを定義する
         preBack = tempEnshitsu.GetChild(0).gameObject;
         Box = tempEnshitsu.GetChild(3).gameObject;
         Dragon = tempEnshitsu.GetChild(4).gameObject;
@@ -43,6 +54,7 @@ public class DragonShow : MonoBehaviour {
         Food = tempEnshitsu.GetChild(7).gameObject;
         MiddleBar = tempEnshitsu.GetChild(8).gameObject;
         Suchiru = tempEnshitsu.GetChild(9).gameObject;
+
         _initPos[0] = Box.transform.localPosition;
         _initSize[0] = Box.GetComponent<RectTransform>().sizeDelta;
         _initPos[1] = Dragon.transform.localPosition;
@@ -51,9 +63,12 @@ public class DragonShow : MonoBehaviour {
         _initSize[2] = Food.GetComponent<RectTransform>().sizeDelta;
         BackGround.GetComponent<Image>().material.SetFloat("_EffectAmount", 0);
     }
+    #endregion
+
+    //順番によって画面演出をする
     public void CallShow()
     {
-        if (vocalOnly)
+        if (vocalOnly)//音声演出
         {
             switch (vocalOnlyIndex)
             {
@@ -164,7 +179,7 @@ public class DragonShow : MonoBehaviour {
         }
         else
         {
-            switch (_showIndex)
+            switch (_showIndex)　//画面演出処理
             {
                 case -1:
                     _changePic(ScreenMask, null);
@@ -607,10 +622,9 @@ public class DragonShow : MonoBehaviour {
         }
         Debug.Log(_showIndex);
     }
-	
-	void Update () {
-		
-	}
+
+    #region 演出関数
+    //ものを出現する関数
     IEnumerator PopOut(GameObject MovTarget, bool initMove)
     {
         AnimDelay = true;
@@ -667,21 +681,26 @@ public class DragonShow : MonoBehaviour {
        
         yield return null;
     }
+
+    //画像を差し替える
     void _changePic(GameObject target,Sprite newPic)
     {
         target.GetComponent<Image>().sprite = newPic;
     }
+    //画像の座標を初期化する
     void _setInit(GameObject target, int index)
     {
         target.transform.localPosition = _initPos[index];
         target.GetComponent<RectTransform>().sizeDelta = _initSize[index];
     }
+    //画像の色を変える（一瞬で）
     void _setColor(GameObject target,Color orgColor, Color tarColor)
     {
         Color tempColor = new Color();
         tempColor = tarColor;
         target.GetComponent<Image>().color = Color.Lerp(orgColor,tempColor,1);
     }
+    //画像の色を変える（染める）
     IEnumerator _changeColor(GameObject target,Color orgColor,Color tarColor,float delay,bool Hide)
     {
             for (int i = 0; i < 100; i++)
@@ -696,6 +715,7 @@ public class DragonShow : MonoBehaviour {
         if (Hide) { target.SetActive(false); }
         yield return null;
     }
+    //画像を拡大
     IEnumerator _changeSize(GameObject target,float times)
     {
         var temp = target.GetComponent<RectTransform>().sizeDelta;
@@ -711,6 +731,7 @@ public class DragonShow : MonoBehaviour {
         }
         yield return null;
     }
+    //画面に一閃の処理
     IEnumerator _flashScreen(GameObject target,Color tarColor)
     {
         float tempCount;
@@ -734,6 +755,7 @@ public class DragonShow : MonoBehaviour {
         target.SetActive(false);
         yield return null;
     }
+    //画像を移動する
     IEnumerator _repos(GameObject target, Vector3 newpos)
     {
         Vector3 tempPos = target.transform.localPosition;
@@ -747,6 +769,7 @@ public class DragonShow : MonoBehaviour {
         }
         yield return null;
     }
+    //過去を表現するのエフェクト
     IEnumerator _rewind(float preset)
     {
         
@@ -763,6 +786,8 @@ public class DragonShow : MonoBehaviour {
         
         yield return null;
     }
+
+    //スチルのエフェクト
     IEnumerator _showSuchiru()
     {
         StartCoroutine(_changeColor(Suchiru, Color.clear,Color.white, 0.02f,false));
@@ -775,9 +800,9 @@ public class DragonShow : MonoBehaviour {
         yield return null;
         
     }
+    //音声を順番にならす
     IEnumerator _soundProcedure(int index, System.Action task)
     {
-        
         while (SoundMnger.SoundInstance.GetSe().isPlaying)
         {
             yield return new WaitForSeconds(0.01f);
@@ -792,6 +817,7 @@ public class DragonShow : MonoBehaviour {
         task();
         
     }
+    //特別演出
     IEnumerator _enshitsuK(int index)
     {
         StartCoroutine(_changeColor(MiddleBar, Color.clear, Color.white, 0.01f, false));
@@ -807,6 +833,7 @@ public class DragonShow : MonoBehaviour {
         StartCoroutine(_changeColor(ScreenMask, Color.white, Color.clear, 0.01f, false));
         yield return null;
     }
+    //暗転処理
     IEnumerator _turnDark(System.Action task)
     {
         do
@@ -819,6 +846,7 @@ public class DragonShow : MonoBehaviour {
         task();
         yield return null;
     }
+    //特別演出２
     IEnumerator _enshitsuI(GameObject ZoomedBack,Vector3 newpos,Vector3 newscale)
     {
         
@@ -834,10 +862,12 @@ public class DragonShow : MonoBehaviour {
         
         yield return null;
     }
+    //遅延処理
     IEnumerator delayRun(float delayTime,System.Action task)
     {
         if (AnimDelay) yield return new WaitForSeconds(delayTime);
         task();
     }
+    #endregion
 }
 

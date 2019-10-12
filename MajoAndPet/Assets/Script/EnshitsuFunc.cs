@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//共用関数
 public class EnshitsuFunc{
 
     private bool fading = false;

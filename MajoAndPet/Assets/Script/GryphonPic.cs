@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+//グリフォンの画像を保存する
 public class GryphonPic : MonoBehaviour {
     public static GryphonPic MobPics;
     public Sprite[] GryphonSprite;

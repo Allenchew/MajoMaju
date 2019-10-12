@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//演出のフラグ
 public class ScenarioManager : MonoBehaviour {
+    //シナリオの種類
     public enum ScenarioType
     {
         SFides,
         SGryphon,
         SWolf
     }
+
     enum GameMode
     {
          Scenario,
@@ -82,16 +85,12 @@ public class ScenarioManager : MonoBehaviour {
         Screen.SetResolution(2048, 1536, false);
         SceneMngIns = this;
     }
-
-    void Start () {
-        
-    }
-	
-	// Update is called once per frame
+    //文字をプリントする機能
 	void Update () {
         
         if (StartGame && !pauseGame)
         {
+            //加速モードのフラグ
             if (fastforwardmode)
             {
                 CountHold += Time.deltaTime;
@@ -171,6 +170,7 @@ public class ScenarioManager : MonoBehaviour {
             }
         }
     }
+    //名前を入力欄処理
     public void ConfirmName()
     {
         tempName = NameField.text;
@@ -179,6 +179,7 @@ public class ScenarioManager : MonoBehaviour {
         ScreenMask.GetComponent<Image>().sprite = StartingPic[1];
         ScenarioButton.SetActive(true);
     }
+    //加速モードの切り替え
     public void OnHoldFF(int index)
     {
         switch (index)
@@ -213,6 +214,7 @@ public class ScenarioManager : MonoBehaviour {
                 break;
         }
     }
+    //UIの表示の切り替え
     public void TurnOffUi()
     {
         MainUi.SetActive(false);
@@ -221,6 +223,7 @@ public class ScenarioManager : MonoBehaviour {
         ChatDelay = 0f;
         printdelay = 0f;
     }
+    //ゲームをポーズ
     public void SetPause(bool preset)
     {
         pauseGame = preset;
@@ -229,6 +232,7 @@ public class ScenarioManager : MonoBehaviour {
     {
         return printing;
     }
+    
     public void ChooseScenario(int index)
     {
         switch (index)
@@ -267,6 +271,7 @@ public class ScenarioManager : MonoBehaviour {
         StartGame = true;
         MainUi.SetActive(true);
     }
+    //文字をプリントする機能
     IEnumerator PrintOut(string scenarioTexts)
     {
         printing = true;

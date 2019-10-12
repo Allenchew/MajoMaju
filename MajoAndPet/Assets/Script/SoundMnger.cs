@@ -6,10 +6,24 @@ using UnityEngine.UI;
 
 
 public class SoundMnger : MonoBehaviour {
+    #region singleton
     public static SoundMnger SoundInstance;
-    
+    private void Awake()
+    {
+        if (SoundInstance == null)
+        {
+            SoundInstance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (SoundInstance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
     public Camera cam;
-    public AudioClip Opening = new AudioClip();
+    public AudioClip Opening;
     public AudioClip[] Bgms = new AudioClip[6];
     public AudioClip[] DragonSE = new AudioClip[13];
     public AudioClip[] DragonVocal = new AudioClip[13];
@@ -32,17 +46,7 @@ public class SoundMnger : MonoBehaviour {
     private bool testPlaying = false;
     private float BgmStepping = 0.01f;
 
-    private void Awake()
-    {
-        if (SoundInstance == null)
-        {
-            SoundInstance = this;
-            DontDestroyOnLoad(gameObject);
-        }else if(SoundInstance != this)
-        {
-            Destroy(gameObject);
-        }
-    }
+   
     void Start () {
         cam = Camera.main;
         BgmPlaying = cam.GetComponent<AudioSource>();
@@ -51,8 +55,10 @@ public class SoundMnger : MonoBehaviour {
         NextScene = SceneManager.GetActiveScene().name;
         StartCoroutine(ScalingBgm(BgmStepping));
     }
+
     void Update()
     {
+        //bgmの再生時に音量を増加する処理
         if (StartAdj)
         {
             BgmStepping = BgmVolume.value /100;
@@ -64,9 +70,9 @@ public class SoundMnger : MonoBehaviour {
                 Debug.Log("test");
             }
         }
+        //シーンのロード
         if(CurrentScene != NextScene)
         {
-            
             if (SceneManager.GetActiveScene().name == "Main")
             {
                 if (StartPlay)
@@ -80,6 +86,7 @@ public class SoundMnger : MonoBehaviour {
                 }
             }
         }
+        //
         else if(CurrentScene == "Title")
         {
             if (BgmPlaying.time > 87 && !isScaled)
@@ -95,36 +102,41 @@ public class SoundMnger : MonoBehaviour {
             }
         }
     }
+    //ドラゴンの音声を流す
     public void GetVocalPlay(int index)
     {
         VocalPlaying.clip = DragonVocal[index];
         VocalPlaying.Play();
     }
+    //グリフォンの音声を流す
     public void GetGryphonVocal(int index)
     {
         VocalPlaying.clip = GryphonVocal[index];
         VocalPlaying.Play();
     }
-
+    //SEを流す
     public void GetSePlay(int index)
     {
         SEPlaying.clip = DragonSE[index];
         SEPlaying.Play();
     }
-
+    //BGMを流す
     public void GetBgmPlay(int index)
     {
         BgmPlaying.clip = Bgms[index];
         BgmPlaying.Play();
     }
+    //BGMを止める
     public void StopBgm()
     {
         BgmPlaying.Stop();
     }
+    //SEを止める
     public void StopSe()
     {
         SEPlaying.Stop();
     }
+    
     public AudioSource GetSe()
     {
         return SEPlaying;
@@ -133,6 +145,7 @@ public class SoundMnger : MonoBehaviour {
     {
         Destroy(gameObject);
     }
+    
     public void GetScaling(bool Increment)
     {
         Debug.Log("called");
@@ -151,7 +164,7 @@ public class SoundMnger : MonoBehaviour {
             }
         }
     }
-
+    //新たなシーンをセットアップ
     void InitNewScene()
     {
         cam = Camera.main;
@@ -166,7 +179,7 @@ public class SoundMnger : MonoBehaviour {
         StartCoroutine(ScalingBgm(BgmStepping));
         BgmPlaying.loop = true;
     }
-    
+    //音量を調整する
     IEnumerator ScalingBgm(float Stepping)
     {
         IsScaling = true;

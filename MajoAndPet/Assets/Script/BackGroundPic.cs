@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+//背景を保存する
 public class BackGroundPic : MonoBehaviour {
     public static BackGroundPic AccsBack;
 
@@ -11,19 +11,16 @@ public class BackGroundPic : MonoBehaviour {
     public Image BGpic;
     
     private bool Called = false;
-	// Use this for initialization
+
     void Awake()
     {
         AccsBack = this;
     }
 	void Start () {
-        
         BGpic = gameObject.GetComponent<Image>();
         BGpic.sprite = BackGroundSprite[2];
 
 	}
-	void Update () {
-		
-	}
+
   
 }

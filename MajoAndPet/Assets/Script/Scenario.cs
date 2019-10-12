@@ -2,55 +2,66 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//セリフや投げろの順番データを保存する
 public class Scenario {
     public static string Username;
 
+    //シナリオを保存する
     public string[][] GetAllScenario(int index)
     {
         string[][] tempStorage = new string[][] { Narration[index], Majo[index], Mobs[index], Mao[index] };
         return tempStorage;
     }
+    //話すキャラクターの順番を保存する
     public int[] GetNagare(int index)
     {
         return ChatNagare[index];
     }
+    //同じキャラクターで複数のセリフがあるときの回数を保存
     public int[] GetRepeat(int index)
     {
         return RepeatTime[index];
     }
+    //名前をゲット
     public string[] GetCharName(int index)
     {
         return CharName[index];
     }
+    //プレイヤーの名前をゲット
     public string[] GetMobsName(int index)
     {
         return MobsName[index];
     }
 
+
     public int[] GetStep(int index)
     {
         return transformStep[index];
     }
+    //ミニーゲームに入るフラグ
     public int[] GetEntry(int index)
     {
         return MiniGameEntry[index];
     }
+    //キャラクターの名前
     private string[][] MobsName = new string[][] { new string[] { "？？？", "ドラゴンの子供", "フィデス" },
                                                       new string[] { "？？？", "グリフォンの子供", "インテゲル" },
                                                       new string[] { "子犬", "オオカミの子供", "オオカミ", "モルゲン", "オオカミ", "モルゲン" } };
-
+    //キャラクターの名前が変更にかけるフラグ
     private int[][] transformStep = new int[][]
     {
         new int[] { 1, 6 },
         new int[] { 2, 6 },
         new int[] { 1, 2,5, 7,16 }
     };
+    //ミニーゲームに入るフラグ
     private int[][] MiniGameEntry = new int[][]
     {
         new int[] { 78 ,137},
          new int[] { 69, -1 },
           new int[] { -1, -1 }
     };
+    //それぞれのセリフをロードする
     private int[][] ChatNagare = new int[][] {
     new int[]
     {
@@ -85,6 +96,7 @@ public class Scenario {
         2,0,1,0,2,1,0,2,1,0,2,-1
     }
     };
+    //同じキャラクターの会話が続く回数
     private int[][] RepeatTime = new int[][] {
     new int[]
     {
@@ -119,13 +131,14 @@ public class Scenario {
         1,2,1,2,1,2,3,3,3,1,2
     }
     };
+    //キャラクターの名前を保存する
     private string[][] CharName = new string[][]
     {
         new string[] { "", Username, "フィデス", "魔王フェルス" },
         new string[] { "", Username, "インテゲル", "魔王フェルス" },
         new string[] { "", Username, "モルゲン", "魔王フェルス" }
     };
-    
+    //セリフを保存する
     private string[][] Narration = new string[][]
     {
          new string[] //Narration

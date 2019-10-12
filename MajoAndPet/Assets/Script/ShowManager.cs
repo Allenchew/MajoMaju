@@ -30,9 +30,6 @@ public class ShowManager : MonoBehaviour {
     {
         ItsShow = this;
     }
-
-    void Update()
-    {
-    }
+    
     
 }
